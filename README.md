@@ -18,8 +18,8 @@ A Model Context Protocol (MCP) server that provides access to Chuck Norris jokes
 
 2. **Set up virtual environment** (recommended):
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python3 -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 3. **Install dependencies**:
@@ -32,7 +32,7 @@ A Model Context Protocol (MCP) server that provides access to Chuck Norris jokes
 ### Running the server
 
 ```bash
-source venv/bin/activate
+source .venv/bin/activate
 python3 server.py
 ```
 
@@ -51,7 +51,77 @@ Fetches a random Chuck Norris joke from the API.
 
 - **API Base URL**: `https://api.chucknorris.io/jokes`
 - **Timeout**: 10 seconds for API requests
-- **Logging Level**: DEBUG (logs to `logs/chuck_norris_server.log`)
+- **Logging Level**: INFO (use `--debug` flag for DEBUG level, logs to `logs/chuck_norris_server.log`)
+
+## Integration with MCP Clients
+
+### Claude Desktop
+
+Add the following to your `claude_desktop_config.json` (typically located at `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "chuck-norris": {
+      "command": "python3",
+      "args": ["/path/to/your/mcp-chucknorris/server.py"],
+      "env": {
+        "PATH": "/path/to/your/mcp-chucknorris/.venv/bin:$PATH"
+      }
+    }
+  }
+}
+```
+
+Replace `/path/to/your/mcp-chucknorris` with the actual path to your project directory.
+
+### Claude Code (VSCode Extension)
+
+In your VSCode `settings.json`, add:
+
+```json
+{
+  "claude-code.mcpServers": {
+    "chuck-norris": {
+      "command": "python3",
+      "args": ["server.py"],
+      "cwd": "/path/to/your/mcp-chucknorris"
+    }
+  }
+}
+```
+
+### Kilo Code (VSCode Extension)
+
+In your VSCode `settings.json`, add:
+
+```json
+{
+  "kilo-code.mcpServers": {
+    "chuck-norris": {
+      "command": "python3",
+      "args": ["server.py"],
+      "cwd": "/path/to/your/mcp-chucknorris"
+    }
+  }
+}
+```
+
+### GitHub Copilot in VSCode
+
+If using an MCP-enabled extension for GitHub Copilot, add to your VSCode `settings.json`:
+
+```json
+{
+  "github.copilot.mcpServers": {
+    "chuck-norris": {
+      "command": "python3",
+      "args": ["server.py"],
+      "cwd": "/path/to/your/mcp-chucknorris"
+    }
+  }
+}
+```
 
 ## License
 
