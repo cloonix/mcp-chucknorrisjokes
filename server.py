@@ -6,9 +6,11 @@ A Model Context Protocol server that provides access to Chuck Norris jokes
 from the Chuck Norris API (https://api.chucknorris.io).
 """
 
+import argparse
 import asyncio
 import json
 import logging
+import os
 import sys
 from typing import Any, Sequence
 
@@ -24,13 +26,22 @@ from mcp.types import (
     LoggingLevel
 )
 
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="Chuck Norris MCP Server")
+parser.add_argument('--debug', action='store_true', help='Enable debug logging')
+args = parser.parse_args()
+
 # Configure logging
+log_level = logging.DEBUG if args.debug else logging.INFO
+log_dir = os.path.dirname(os.path.abspath(__file__))
+log_file = os.path.join(log_dir, 'logs', 'chuck_norris_server.log')
+os.makedirs(os.path.dirname(log_file), exist_ok=True)
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=log_level,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stderr),
-        logging.FileHandler('logs/chuck_norris_server.log')
+        logging.FileHandler(log_file)
     ]
 )
 logger = logging.getLogger("chuck-norris-server")
